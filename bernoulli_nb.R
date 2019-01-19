@@ -46,7 +46,7 @@ print.bernoulliNaiveBayess <- function(x, ...) {
 predict.bernoulliNaiveBayess <- function(object, data) {
   stopifnot(is.data.frame(data))
   
-  aprioriProbsMat <- matrix(data = object$aprioriProbs, nrow = 2, ncol = 3, byrow = TRUE)
+  aprioriProbsMat <- matrix(data = object$aprioriProbs, nrow = nrow(data), ncol = size(object$aprioriProbs), byrow = TRUE)
   scores <- matrix(data = 1, nrow = nrow(data), ncol = size(object$aprioriProbs))
   
   for (atrName in names(data)) {
