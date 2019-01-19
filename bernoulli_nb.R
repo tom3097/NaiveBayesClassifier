@@ -6,6 +6,9 @@ bernoulliNaiveBayess <- function(formula, data) {
   stopifnot(inherits(formula, "formula"))
   stopifnot(is.data.frame(data))
   
+  print(ncol(data))
+  print(length(names(data)))
+  
   m <- match.call(expand.dots = FALSE)
   m[[1L]] <- quote(stats::model.frame)
   m <- eval(m, parent.frame())
@@ -13,13 +16,33 @@ bernoulliNaiveBayess <- function(formula, data) {
   Y <- model.extract(m, "response")
   X <- m[,-attr(Terms, "response"), drop = FALSE]
   
+  print("NAMES")
+  print(length(names(X)))
+  
+  print(sum(names(X) == "target"))
+  print(sum(names(X) == "atampt"))
+  #return()
+
+  
+  print(Y)
+  
+  print(length(names(X)))
   aprioriProbs <- table(Y) / sum(table(Y))
   conditionalProbs <- lapply(names(X), function(atrName) {
+    if (atrName == "atampt") {
+      print("Jest atampt")
+      print((table(Y, X[[atrName]]) + 1) / (rowSums(table(Y, X[[atrName]])) + 2))
+    }
     return(
       (table(Y, X[[atrName]]) + 1) / (rowSums(table(Y, X[[atrName]])) + 2)
     )
   })
   names(conditionalProbs) <- names(X)
+  
+  #print(length(conditionalProbs))
+  #print(length(names(X)))
+  #print(conditionalProbs[["atampt"]])
+  #return()
   
   return(
     structure(
@@ -46,15 +69,27 @@ print.bernoulliNaiveBayess <- function(x, ...) {
 predict.bernoulliNaiveBayess <- function(object, data) {
   stopifnot(is.data.frame(data))
   
-  aprioriProbsMat <- matrix(data = object$aprioriProbs, nrow = nrow(data), ncol = size(object$aprioriProbs), byrow = TRUE)
-  scores <- matrix(data = 1, nrow = nrow(data), ncol = size(object$aprioriProbs))
+  print(length(names(object$conditionalProbs)))
+  print(sum(names(object$conditionalProbs) == "atampt"))
+  print(object$conditionalProbs[["atampt"]])
+
+  print(object$aprioriProbs)
+  print(length(object$aprioriProbs))
+  
+  aprioriProbsMat <- matrix(data = object$aprioriProbs, nrow = nrow(data), ncol = length(object$aprioriProbs), byrow = TRUE)
+  scores <- matrix(data = 1, nrow = nrow(data), ncol = length(object$aprioriProbs))
   
   for (atrName in names(data)) {
-    dataMat <- as.matrix(data[[atrName]])
-    probs1Mat <- t(as.matrix(object$conditionalProbs[[atrName]][, "1"]))
+    if (atrName == "X1") {
+      next
+    }
+    #print(atrName)
+    dataMat <- as.matrix(as.numeric(levels(data[[atrName]]))[data[[atrName]]])
+    #print(dataMat)
+    #probs1Mat <- t(as.matrix(object$conditionalProbs[[atrName]][, "1"]))
     probs0Mat <- t(as.matrix(object$conditionalProbs[[atrName]][, "0"]))
     
-    atrScore <- dataMat %*% probs1Mat + (1 - dataMat) %*% probs0Mat
+    atrScore <- dataMat %*% (1 - probs0Mat) + (1 - dataMat) %*% probs0Mat
     scores <- scores * atrScore
   }
   
@@ -87,3 +122,4 @@ print(bnb)
 
 y <- predict(bnb, bernoulliBOWTest)
 print(y)
+
