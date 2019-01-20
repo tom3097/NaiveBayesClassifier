@@ -22,7 +22,7 @@ main <- function() {
   	return(-1)
   }
 
-  load(paste0("../data/", args))
+  load(paste0("../data/processed/", args))
 
   cat("Testing MULTINOMIAL naive bayes\n\n")
 
