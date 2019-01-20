@@ -27,7 +27,7 @@ bernoulliNaiveBayes <- function(formula, data) {
   
   aprioriProbs <- table(Y) / sum(table(Y))
   conditionalProbs <- lapply(names(X), function(atrName) {
-    atrLevels = levels(X[[atrName]])
+    atrLevels <- levels(X[[atrName]])
     stopifnot(length(atrLevels) == 2)
     stopifnot(atrLevels[1] == "0")
     stopifnot(atrLevels[2] == "1")

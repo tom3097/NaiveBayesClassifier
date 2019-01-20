@@ -26,7 +26,7 @@ multinomialNaiveBayes <- function(formula, data) {
   X <- m[,-attr(Terms, "response"), drop = FALSE]
   
   aprioriProbs <- table(Y) / sum(table(Y))
-  labels = as.numeric(levels(sort(unique(Y)))[sort(unique(Y))])
+  labels <- as.numeric(levels(sort(unique(Y)))[sort(unique(Y))])
   classProbs <- lapply(labels, function(x) {
     clsData <- X[Y == x,]
     clsData[1:length(clsData)] <- lapply(clsData[1:length(clsData)],function(x) {
@@ -86,16 +86,16 @@ predict.multinomialNaiveBayes <- function(object, data) {
   scores <- matrix(data = 1, nrow = nrow(data), ncol = size(object$aprioriProbs))
   
   for (atrName in object$atrNames) {
-    atrData = as.numeric(levels(data[[atrName]]))[data[[atrName]]]
+    atrData <- as.numeric(levels(data[[atrName]]))[data[[atrName]]]
     dataMat <- matrix(atrData, nrow = nrow(data), ncol = size(object$aprioriProbs))
     probsMat <- t(matrix(object$conditionalProbs[[atrName]], nrow = size(object$aprioriProbs),
                          ncol = nrow(data)))
     
-    atrScore = dataMat * log(probsMat)
-    scores = scores + atrScore
+    atrScore <- dataMat * log(probsMat)
+    scores <- scores + atrScore
   }
 
-  scores = scores + log(aprioriProbsMat)
+  scores <- scores + log(aprioriProbsMat)
   Y <- argmax(scores)
   
   return(Y)
