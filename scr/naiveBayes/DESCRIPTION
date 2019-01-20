@@ -1,0 +1,13 @@
+Package: naiveBayes
+Title: Naive Bayes Classifier
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Tomasz", "Bochenski", email="tbochens@gmail.com", role=c("aut", "cre")),
+    person("Mariusz", "Slapek", email="mariusz.slapek@gmail.com", role=c("aut"))
+    )
+Description: Naive Bayes Classifier for bag of words documents written as a part of university project.
+Depends: R (>= 3.4.4)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1.9000
