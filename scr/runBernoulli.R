@@ -16,7 +16,7 @@ source("utils/metrics.R")
 
 
 main <- function() {
-  args = commandArgs(trailingOnly=TRUE)
+  args <- commandArgs(trailingOnly=TRUE)
   if (length(args) != 1) {
   	cat("Please provide one required parameter (no more)")
   	return(-1)
@@ -28,8 +28,8 @@ main <- function() {
 
   cat("e1071 naive bayes:\n")
   startTime <- Sys.time()
-  naiveBayesModel=naiveBayes(Y ~., data=bagOfWordsBinary, laplace = 1)
-  NBPredictions=predict(naiveBayesModel,bagOfWordsBinary)
+  naiveBayesModel <- naiveBayes(Y ~., data=bagOfWordsBinary, laplace = 1)
+  NBPredictions <- predict(naiveBayesModel,bagOfWordsBinary)
   endTime <- Sys.time()
   cat(paste("Accuracy:", accuracyScore(NBPredictions, bagOfWordsBinary$Y), "\n"))
   cat(paste("Duration:", endTime - startTime, "\n"))
@@ -39,7 +39,7 @@ main <- function() {
   cat("custom naive bayes:\n")
   startTime <- Sys.time()
   bnb <- bernoulliNaiveBayes(Y ~., bagOfWordsBinary)
-  bnbPredictions = predict(bnb, bagOfWordsBinary)
+  bnbPredictions <- predict(bnb, bagOfWordsBinary)
   endTime <- Sys.time()
   cat(paste("Accuracy:", accuracyScore(bnbPredictions, bagOfWordsBinary$Y), "\n"))
   cat(paste("Duration:", endTime - startTime, "\n"))
